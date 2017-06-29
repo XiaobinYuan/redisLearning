@@ -1,0 +1,83 @@
+SET resource:lock "Redis Demo"
+EXPIRE resource:lock 120       #Redis can be told that a key should only exist for a certain length of time.
+TTL resource:lock               #You can test how long a key will exist with the TTL command
+(integer) 103
+
+TTL resource:lock => -2         #The -2 for the TTL of the key means that the key does not exist (anymore). A -1 for the TTL of the key means that it will never expire. Note that if you SET a key, its TTL will be reset.
+SET resource:lock "Redis Demo 1"
+EXPIRE resource:lock 120
+TTL resource:lock => 119
+SET resource:lock "Redis Demo 2"
+TTL resource:lock => -1
+######list######
+RPUSH friends "Alice"
+RPUSH friends "Bob"
+LPUSH friends "Sam"
+get friends
+(error) WRONGTYPE Operation against a key holding the wrong kind of value
+
+LRANGE friends 0 -1 => 1) "Sam", 2) "Alice", 3) "Bob"
+LRANGE friends 0 1 => 1) "Sam", 2) "Alice"
+LRANGE friends 1 2 => 1) "Alice", 2) "Bob"
+
+> LRANGE friends 0 4
+1) "Sam"
+2) "Alice"
+3) "Bob"
+
+> llen friends
+(integer) 3
+> lpop friends
+"Sam"
+> rpop friends
+"Bob"
+> LRANGE friends 0 -1
+1) "Alice"
+######set######
+> SADD superpowers "flight"         #SADD adds the given value to the set.
+(integer) 1
+> SADD superpowers "x-ray vision"
+(integer) 1
+> SADD superpowers "reflexes"
+(integer) 1
+
+SREM superpowers "reflexes"       #SREM removes the given value from the set.
+> srem superpowers "test"
+0
+
+> SISMEMBER superpowers "flight"  #SISMEMBER tests if the given value is in the set. It returns 1 if the value is there and 0 if it is not.
+(integer) 1
+> SISMEMBER superpowers "reflexes"
+(integer) 0
+
+> SMEMBERS superpowers    #SMEMBERS returns a list of all the members of this set.
+1) "x-ray vision"
+2) "flight"
+
+> SMEMBERS superpowers
+1) "x-ray vision"
+2) "flight"
+> SUNION superpowers birdpowers   SUNION combines two or more sets and returns the list of all elements.
+1) "pecking"
+2) "flight"
+3) "x-ray vision"
+
+###### sorted map#######
+ZADD hackers 1940 "Alan Kay"
+    ZADD hackers 1906 "Grace Hopper"
+    ZADD hackers 1953 "Richard Stallman"
+    ZADD hackers 1965 "Yukihiro Matsumoto"
+    ZADD hackers 1916 "Claude Shannon"
+    ZADD hackers 1969 "Linus Torvalds"
+    ZADD hackers 1957 "Sophie Wilson"
+    ZADD hackers 1912 "Alan Turing"
+    
+    > zrange hackers 0 -1
+1) "Grace Hopper"
+2) "Alan Turing"
+3) "Claude Shannon"
+4) "Alan Kay"
+5) "Richard Stallman"
+6) "Sophie Wilson"
+7) "Yukihiro Matsumoto"
+8) "Linus Torvalds"
