@@ -81,3 +81,21 @@ ZADD hackers 1940 "Alan Kay"
 6) "Sophie Wilson"
 7) "Yukihiro Matsumoto"
 8) "Linus Torvalds"
+
+> HMSET user:1001 name "Mary Jones" password "hidden" email "mjones@example.com"
+OK
+> hgetall user:1001
+1) "name"
+2) "Mary Jones"
+3) "password"
+4) "hidden"
+5) "email"
+6) "mjones@example.com"
+> HGET user:1001 name
+"Mary Jones"
+
+> hgetall user
+(empty list or set)
+> hget user
+> hget user:1001
+(error) wrong number of arguments (given 1, expected 2)
