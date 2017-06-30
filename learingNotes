@@ -99,3 +99,9 @@ OK
 > hget user
 > hget user:1001
 (error) wrong number of arguments (given 1, expected 2)
+
+HSET user:1000 visits 10
+HINCRBY user:1000 visits 1 => 11
+HINCRBY user:1000 visits 10 => 21
+HDEL user:1000 visits
+HINCRBY user:1000 visits 1 => 1
